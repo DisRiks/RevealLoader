@@ -1,10 +1,10 @@
 {
   "launcher": {
     "version": "1.1.0",
-    "url": "",
-    "sha256": "",
-    "size": 0,
-    "notes": "Тестовая версия"
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.1.0/RevealLoader.exe",
+    "sha256": "02124b0d8841af990ff26815a601bdc8fdc84dabc0e57c1e90c53ca5a572fa76",
+    "size": 139834398,
+    "notes": "Тестовый релиз: проверка принудительного обновления"
   },
   "visual": {
     "version": "0.0.0",
