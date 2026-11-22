@@ -1,13 +1,23 @@
 {
   "entries": [
     {
+      "version": "1.3.1",
+      "type": "normal",
+      "ru": [
+        "Клиент скачивается во временную папку, а распаковывается в .revealvisual"
+      ],
+      "en": [
+        "The client is downloaded to a temporary folder and unpacked into .revealvisual"
+      ]
+    },
+    {
       "version": "1.3.0",
       "type": "global",
       "ru": [
-        "Большое обновление визуалов — лаунчер сам скачивает и запускает визуальный клиент"
+        "Большое обновление визуалов"
       ],
       "en": [
-        "Major visuals update — the launcher now downloads and launches the visual client itself"
+        "Major visuals update"
       ]
     },
     {
