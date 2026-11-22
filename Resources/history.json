@@ -4,10 +4,10 @@
       "version": "1.3.1",
       "type": "normal",
       "ru": [
-        "Клиент скачивается во временную папку, а распаковывается в .revealvisual"
+        "Фикс багов"
       ],
       "en": [
-        "The client is downloaded to a temporary folder and unpacked into .revealvisual"
+        "Fixed bugs"
       ]
     },
     {
