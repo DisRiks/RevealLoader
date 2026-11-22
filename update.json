@@ -1,10 +1,10 @@
 {
   "launcher": {
-    "version": "0.0.0",
+    "version": "1.1.0",
     "url": "",
     "sha256": "",
     "size": 0,
-    "notes": ""
+    "notes": "Тестовая версия"
   },
   "visual": {
     "version": "0.0.0",

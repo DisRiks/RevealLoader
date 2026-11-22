@@ -64,6 +64,18 @@ public partial class MainWindow : Window
         }
 
         ShowPage(HomePage);
+
+        _ = CheckForUpdatesAsync();
+    }
+
+    /// <summary>Проверяет обновление лаунчера и сообщает версию в статус-строке.</summary>
+    private async Task CheckForUpdatesAsync()
+    {
+        string? version = await UpdateService.GetAvailableLauncherVersionAsync();
+        if (version != null)
+            SetStatus(_currentLang == "RU"
+                ? $"Доступна версия {version}"
+                : $"Version {version} available");
     }
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
