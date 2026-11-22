@@ -258,14 +258,12 @@ public partial class MainWindow : Window
     private void RamInput_TextChanged(object sender, TextChangedEventArgs e)
         => UpdateInfoStrip();
 
-    /// <summary>Обновляет строку статуса с мягким проявлением.</summary>
+    /// <summary>Обновляет строку статуса без повторного затемнения при обновлении прогресса.</summary>
     private void SetStatus(string text)
     {
+        StatusText.BeginAnimation(OpacityProperty, null);
+        StatusText.Opacity = 1;
         StatusText.Text = text;
-        StatusText.BeginAnimation(OpacityProperty, new DoubleAnimation(0.2, 1, TimeSpan.FromMilliseconds(240))
-        {
-            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
-        });
     }
 
     /// <summary>Строит список истории версий из вшитого файла.</summary>

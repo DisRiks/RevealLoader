@@ -501,8 +501,9 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,24,0,0">
                             <Border x:Name="StatusDot" Width="6" Height="6" CornerRadius="3" Background="#ffffff"
                                     Margin="0,0,9,0" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="StatusText" Text="Готов к запуску" Foreground="#4a4a4a"
-                                       FontSize="12" FontFamily="Segoe UI" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="StatusText" Text="Готов к запуску" Foreground="#d6d6d6"
+                                       FontSize="13" FontWeight="SemiBold" FontFamily="Segoe UI"
+                                       VerticalAlignment="Center"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
