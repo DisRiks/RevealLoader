@@ -7,10 +7,10 @@
     "notes": "История версий: список версий с типом обновления (глобальное/обычное) и описанием изменений (RU/EN)"
   },
   "visual": {
-    "version": "0.0.0",
-    "url": "",
-    "sha256": "",
-    "size": 0,
-    "notes": ""
+    "version": "1.21.11",
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/visual-1.21.11/RevealClient.jar",
+    "sha256": "40f9c49f8a8656af248de53955806fb8ad2e109d28b68bd27fd32d199f9c52f4",
+    "size": 124657672,
+    "notes": "Визуал 1.21.11"
   }
 }
