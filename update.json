@@ -1,10 +1,10 @@
 {
   "launcher": {
-    "version": "1.3.1",
-    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.3.1/RevealLoader.exe",
-    "sha256": "55980b134d942d468df447970e3f34a71c3e7eadf3225b937f6a2487d0edc35c",
+    "version": "1.3.2",
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.3.2/RevealLoader.exe",
+    "sha256": "9bb29955163f24cb8a0566b3fed5d9fb16a9b5061cbb3a3139bb78ed985fec53",
     "size": 139846686,
-    "notes": "Лаунчер 1.3.1"
+    "notes": "Лаунчер 1.3.2"
   },
   "visual": {
     "version": "1.21.11",
