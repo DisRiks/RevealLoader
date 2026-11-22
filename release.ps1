@@ -6,10 +6,10 @@
 .DESCRIPTION
     -Part launcher — собирает RevealLoader.exe (dotnet publish), считает SHA-256,
                      создаёт релиз с тегом v<версия> и обновляет блок "launcher".
-    -Part visual   — берёт готовый PerritoDLC.jar, считает SHA-256,
+    -Part visual   — берёт готовый RevealClient.jar, считает SHA-256,
                      создаёт релиз с тегом visual-<версия> и обновляет блок "visual".
 
-    Файлы в релиз кладутся под именами RevealLoader.exe и PerritoDLC.jar —
+    Файлы в релиз кладутся под именами RevealLoader.exe и RevealClient.jar —
     именно на них ссылается update.json, менять имена нельзя.
 
 .PARAMETER DryRun
@@ -63,7 +63,7 @@ if ($Part -eq 'launcher') {
     $AssetName = 'RevealLoader.exe'
     $Tag = "v$Version"
 } else {
-    $AssetName = 'PerritoDLC.jar'
+    $AssetName = 'RevealClient.jar'
     $Tag = "visual-$Version"
 }
 
@@ -95,12 +95,16 @@ if ($Part -eq 'launcher') {
 }
 else {
     if ($JarPath -eq '') {
-        $JarPath = Join-Path $PSScriptRoot 'Resources\PerritoDLC\PerritoDLC.jar'
+        $JarPath = Join-Path $PSScriptRoot 'Resources\RevealClient.jar'
     }
     if (-not (Test-Path -LiteralPath $JarPath)) {
         throw "Не найден JAR: $JarPath"
     }
-    $File = (Resolve-Path -LiteralPath $JarPath).Path
+    # Ассет в релизе должен называться RevealClient.jar независимо от имени исходного файла.
+    $stage = Join-Path $env:TEMP 'revealloader-release'
+    New-Item -ItemType Directory -Force -Path $stage | Out-Null
+    $File = Join-Path $stage $AssetName
+    Copy-Item -LiteralPath $JarPath -Destination $File -Force
 }
 
 if (-not (Test-Path -LiteralPath $File)) { throw "Не найден файл для публикации: $File" }

@@ -13,7 +13,7 @@ public sealed record LauncherUpdate(string Version, string Url, string Sha256, l
 /// <summary>Проверяет, скачивает и устанавливает обновления лаунчера по манифесту update.json.</summary>
 public static class UpdateService
 {
-    private const string ManifestUrl =
+    public const string ManifestUrl =
         "https://raw.githubusercontent.com/DisRiks/RevealLoader/main/update.json";
 
     /// <summary>Текущая версия лаунчера из атрибута сборки.</summary>
@@ -72,15 +72,23 @@ public static class UpdateService
         LauncherUpdate update, IProgress<double>? progress, CancellationToken token)
     {
         string tempPath = Path.Combine(Path.GetTempPath(), $"RevealLoader-{update.Version}.exe");
+        await DownloadToFileAsync(update.Url, update.Size, tempPath, progress, token);
+        return tempPath;
+    }
 
+    /// <summary>Скачивает файл по ссылке в указанный путь с отчётом о прогрессе.</summary>
+    public static async Task DownloadToFileAsync(
+        string url, long expectedSize, string destination,
+        IProgress<double>? progress, CancellationToken token)
+    {
         using var http = new HttpClient { Timeout = TimeSpan.FromMinutes(10) };
-        using var response = await http.GetAsync(update.Url, HttpCompletionOption.ResponseHeadersRead, token);
+        using var response = await http.GetAsync(url, HttpCompletionOption.ResponseHeadersRead, token);
         response.EnsureSuccessStatusCode();
 
-        long total = update.Size > 0 ? update.Size : response.Content.Headers.ContentLength ?? 0;
+        long total = expectedSize > 0 ? expectedSize : response.Content.Headers.ContentLength ?? 0;
 
         await using var source = await response.Content.ReadAsStreamAsync(token);
-        await using var target = File.Create(tempPath);
+        await using var target = File.Create(destination);
 
         var buffer = new byte[81920];
         long received = 0;
@@ -92,8 +100,6 @@ public static class UpdateService
             if (total > 0)
                 progress?.Report((double)received / total);
         }
-
-        return tempPath;
     }
 
     /// <summary>Проверяет SHA-256 скачанного файла. Пустой ожидаемый хеш — проверка пропускается.</summary>

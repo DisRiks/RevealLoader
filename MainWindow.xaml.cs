@@ -473,16 +473,30 @@ public partial class MainWindow : Window
 
     private async void PlayButton_Click(object sender, RoutedEventArgs e)
     {
-        SetStatus(_currentLang == "RU" ? "Запуск..." : "Launching...");
+        PlayButton.IsEnabled = false;
         try
         {
-            var launcher = new MinecraftLauncher(_settings);
-            await launcher.LaunchAsync();
-            SetStatus(_currentLang == "RU" ? "Запущено" : "Running");
+            SetStatus(_currentLang == "RU" ? "Проверка обновления..." : "Checking for update...");
+            var progress = new Progress<double>(value =>
+            {
+                int percent = (int)Math.Round(value * 100);
+                SetStatus(_currentLang == "RU"
+                    ? $"Скачивание визуала... {percent}%"
+                    : $"Downloading visuals... {percent}%");
+            });
+            await VisualService.EnsureAsync(progress, CancellationToken.None);
+
+            SetStatus(_currentLang == "RU" ? "Запуск..." : "Launching...");
+            await VisualService.RunAsync(_settings);
+            SetStatus(_currentLang == "RU" ? "Готово" : "Done");
         }
         catch (Exception ex)
         {
             SetStatus($"Error: {ex.Message}");
+        }
+        finally
+        {
+            PlayButton.IsEnabled = true;
         }
     }
 
