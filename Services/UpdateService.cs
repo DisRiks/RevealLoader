@@ -13,8 +13,25 @@ public sealed record LauncherUpdate(string Version, string Url, string Sha256, l
 /// <summary>Проверяет, скачивает и устанавливает обновления лаунчера по манифесту update.json.</summary>
 public static class UpdateService
 {
-    public const string ManifestUrl =
-        "https://raw.githubusercontent.com/DisRiks/RevealLoader/main/update.json";
+    private const byte ManifestUrlXorKey = 0x5A;
+    private static readonly byte[] EncodedManifestUrl =
+    {
+        50, 46, 46, 42, 41, 96, 117, 117, 40, 59, 45, 116, 61, 51, 46, 50,
+        47, 56, 47, 41, 63, 40, 57, 53, 52, 46, 63, 52, 46, 116, 57, 53,
+        55, 117, 30, 51, 41, 8, 51, 49, 41, 117, 8, 63, 44, 63, 59, 54,
+        22, 53, 59, 62, 63, 40, 117, 55, 59, 51, 52, 117, 47, 42, 62, 59,
+        46, 63, 116, 48, 41, 53, 52
+    };
+
+    public static string ManifestUrl { get; } = DecodeManifestUrl();
+
+    private static string DecodeManifestUrl()
+    {
+        var characters = new char[EncodedManifestUrl.Length];
+        for (int i = 0; i < EncodedManifestUrl.Length; i++)
+            characters[i] = (char)(EncodedManifestUrl[i] ^ ManifestUrlXorKey);
+        return new string(characters);
+    }
 
     /// <summary>Текущая версия лаунчера из атрибута сборки.</summary>
     public static string CurrentVersion =>

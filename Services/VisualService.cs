@@ -9,19 +9,27 @@ namespace RevealLoader;
 public sealed record VisualPackage(string Version, string Url, string Sha256, long Size);
 
 /// <summary>
-/// Скачивает клиент-jar во временную (случайную) папку, запускает его с распаковкой
+/// Скачивает клиент-jar во временную (служебную) папку, запускает его с распаковкой
 /// в %APPDATA%\.revealvisual и удаляет мод из game\mods после закрытия игры.
 /// </summary>
 public static class VisualService
 {
     private const string AssetName = "RevealClient.jar";
     private const string ModRelativePath = @"game\mods\revealvisuals-1.21.11.jar";
-    private const string VersionFileName = ".installed-version";
-    private const string JarPathFileName = ".jar-path";
+    private const string TempFolderName = "sjshd9";
+
+    /// <summary>Служебные файлы прошлых версий — удаляются, чтобы не оставались лишние файлы.</summary>
+    private static readonly string[] LegacyStateFiles = { ".installed-version", ".jar-path" };
 
     /// <summary>Папка распаковки клиента: %APPDATA%\.revealvisual.</summary>
     public static string Directory { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".revealvisual");
+
+    /// <summary>Служебная папка во временной директории, куда скачивается jar.</summary>
+    private static string JarDirectory { get; } = Path.Combine(Path.GetTempPath(), TempFolderName);
+
+    /// <summary>Путь к скачанному во временную папку jar.</summary>
+    private static string JarPath => Path.Combine(JarDirectory, AssetName);
 
     /// <summary>Путь к моду, который удаляется после закрытия игры.</summary>
     public static string ModPath => Path.Combine(Directory, ModRelativePath);
@@ -68,59 +76,43 @@ public static class VisualService
     }
 
     /// <summary>
-    /// Гарантирует наличие нужной версии jar: качает в случайную папку во временной
-    /// директории, если файла нет или вышла новая версия. Распаковка идёт в .revealvisual.
-    /// Возвращает путь к jar, который нужно запустить.
+    /// Гарантирует наличие нужной версии jar: качает в служебную временную папку,
+    /// если файла нет или он не совпадает с манифестом по хэшу.
+    /// Распаковка идёт в .revealvisual. Возвращает путь к jar, который нужно запустить.
     /// </summary>
     public static async Task<string> EnsureAsync(IProgress<double>? progress, CancellationToken token)
     {
         System.IO.Directory.CreateDirectory(Directory);
+        System.IO.Directory.CreateDirectory(JarDirectory);
+        RemoveLegacyStateFiles();
 
         var package = await GetPackageAsync();
         if (package is null)
         {
             // Нет манифеста/ссылки — запускаем то, что уже скачано ранее.
-            string? known = ReadState(JarPathFileName);
-            if (known is not null && File.Exists(known))
-                return known;
+            if (File.Exists(JarPath))
+                return JarPath;
             throw new InvalidOperationException(
                 "В манифесте нет ссылки на визуал, а клиент ещё не скачан.");
         }
 
-        string installed = ReadState(VersionFileName) ?? "";
-        string? previous = ReadState(JarPathFileName);
-        bool upToDate = !string.IsNullOrEmpty(installed)
-                        && string.Equals(installed, package.Version, StringComparison.OrdinalIgnoreCase)
-                        && !string.IsNullOrEmpty(previous)
-                        && File.Exists(previous);
-        if (upToDate)
-            return previous!;
-
-        string tempDir = Path.Combine(
-            Path.GetTempPath(), "revealvisual-" + Guid.NewGuid().ToString("N")[..8]);
-        System.IO.Directory.CreateDirectory(tempDir);
-        string jarPath = Path.Combine(tempDir, AssetName);
+        // Уже скачан и совпадает с манифестом — переиспользуем.
+        if (File.Exists(JarPath) && UpdateService.VerifyHash(JarPath, package.Sha256))
+            return JarPath;
 
         try
         {
-            await UpdateService.DownloadToFileAsync(package.Url, package.Size, jarPath, progress, token);
-            if (!UpdateService.VerifyHash(jarPath, package.Sha256))
+            await UpdateService.DownloadToFileAsync(package.Url, package.Size, JarPath, progress, token);
+            if (!UpdateService.VerifyHash(JarPath, package.Sha256))
                 throw new InvalidOperationException("Проверка хеша не пройдена, файл повреждён.");
         }
         catch
         {
-            TryDeleteFile(jarPath);
+            TryDeleteFile(JarPath);
             throw;
         }
 
-        // Убираем предыдущую скачанную копию, если она была.
-        if (!string.IsNullOrEmpty(previous)
-            && !string.Equals(previous, jarPath, StringComparison.OrdinalIgnoreCase))
-            TryDeleteFile(previous);
-
-        File.WriteAllText(Path.Combine(Directory, VersionFileName), package.Version);
-        File.WriteAllText(Path.Combine(Directory, JarPathFileName), jarPath);
-        return jarPath;
+        return JarPath;
     }
 
     /// <summary>
@@ -152,20 +144,11 @@ public static class VisualService
         DeleteMod();
     }
 
-    private static string? ReadState(string fileName)
+    /// <summary>Удаляет служебные файлы прошлых версий из папки распаковки.</summary>
+    private static void RemoveLegacyStateFiles()
     {
-        try
-        {
-            string path = Path.Combine(Directory, fileName);
-            if (!File.Exists(path))
-                return null;
-            string value = File.ReadAllText(path).Trim();
-            return value.Length == 0 ? null : value;
-        }
-        catch
-        {
-            return null;
-        }
+        foreach (string name in LegacyStateFiles)
+            TryDeleteFile(Path.Combine(Directory, name));
     }
 
     private static void TryDeleteFile(string path)

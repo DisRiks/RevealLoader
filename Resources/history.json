@@ -1,6 +1,16 @@
 {
   "entries": [
     {
+      "version": "1.3.3",
+      "type": "normal",
+      "ru": [
+        "URL манифеста скрыт от простого поиска строк в лаунчере"
+      ],
+      "en": [
+        "Manifest URL is hidden from basic string searches in the launcher"
+      ]
+    },
+    {
       "version": "1.3.2",
       "type": "normal",
       "ru": [
