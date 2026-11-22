@@ -14,20 +14,20 @@
       "version": "1.3.3",
       "type": "normal",
       "ru": [
-        "URL манифеста скрыт от простого поиска строк в лаунчере"
+        "Обновление интерфейса"
       ],
       "en": [
-        "Manifest URL is hidden from basic string searches in the launcher"
+        "Update interface"
       ]
     },
     {
       "version": "1.3.2",
       "type": "normal",
       "ru": [
-        "Убраны служебные файлы визуала: клиент хранится во временной папке, актуальность проверяется по хэшу"
+        "Хот фикс багов"
       ],
       "en": [
-        "Removed the visual state files: the client is kept in a temporary folder and validated by hash"
+        "Hot-Fixed bugs"
       ]
     },
     {
