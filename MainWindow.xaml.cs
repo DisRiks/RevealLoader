@@ -484,10 +484,10 @@ public partial class MainWindow : Window
                     ? $"Скачивание визуала... {percent}%"
                     : $"Downloading visuals... {percent}%");
             });
-            await VisualService.EnsureAsync(progress, CancellationToken.None);
+            string jarPath = await VisualService.EnsureAsync(progress, CancellationToken.None);
 
             SetStatus(_currentLang == "RU" ? "Запуск..." : "Launching...");
-            await VisualService.RunAsync(_settings);
+            await VisualService.RunAsync(jarPath, _settings);
             SetStatus(_currentLang == "RU" ? "Готово" : "Done");
         }
         catch (Exception ex)
