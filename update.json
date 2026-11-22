@@ -1,10 +1,10 @@
 {
   "launcher": {
-    "version": "1.3.0",
-    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.3.0/RevealLoader.exe",
-    "sha256": "29821be4ac7e5a97db2d345656b966818ec849b11552125c79826d6e09865231",
+    "version": "1.3.1",
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.3.1/RevealLoader.exe",
+    "sha256": "0add409d3d42cf53ae9efc92e169e6bd83f8355b16dd30a5c269b213ec5baeb4",
     "size": 139846686,
-    "notes": "Глобальное обновление. Большое обновление визуалов."
+    "notes": "Улучшение обновления визуального клиента."
   },
   "visual": {
     "version": "1.21.11",
