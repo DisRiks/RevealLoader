@@ -187,13 +187,25 @@ if (-not $gh) {
     throw 'Не найден gh (GitHub CLI). Установите: winget install GitHub.cli'
 }
 
-& $gh auth status *> $null
-if ($LASTEXITCODE -ne 0) {
-    throw 'gh не авторизован. Выполните: gh auth login --hostname github.com --git-protocol https --web'
+# Проверки gh пишут в stderr при ненулевом коде, поэтому временно снимаем Stop,
+# иначе PowerShell 5.1 превращает это в фатальную NativeCommandError.
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+try {
+    & $gh auth status *> $null
+    $ghAuthed = ($LASTEXITCODE -eq 0)
+
+    & $gh release view $Tag --repo $Slug *> $null
+    $releaseExists = ($LASTEXITCODE -eq 0)
+}
+finally {
+    $ErrorActionPreference = $prevEap
 }
 
-& $gh release view $Tag --repo $Slug *> $null
-if ($LASTEXITCODE -eq 0) {
+if (-not $ghAuthed) {
+    throw 'gh не авторизован. Выполните: gh auth login --hostname github.com --git-protocol https --web'
+}
+if ($releaseExists) {
     throw "Релиз $Tag уже существует. Выбери другой номер версии."
 }
 

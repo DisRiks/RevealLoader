@@ -351,6 +351,13 @@
                                        Foreground="#ffffff" FontSize="19"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </RadioButton>
+                        <RadioButton Style="{StaticResource NavBtn}" x:Name="NavHistory"
+                                     Checked="NavHistory_Checked">
+                            <TextBlock Text="&#xE7C3;" x:Name="IconHistory"
+                                       FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       Foreground="#4d4d4d"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </RadioButton>
                         <RadioButton Style="{StaticResource NavBtn}" x:Name="NavSettings"
                                      Checked="NavSettings_Checked">
                             <TextBlock Text="&#x2699;" x:Name="IconSettings"
@@ -359,8 +366,9 @@
                         </RadioButton>
                     </StackPanel>
 
-                    <TextBlock Grid.Row="3" Text="v1.0" Foreground="#242424" FontSize="10"
-                               FontFamily="Consolas" HorizontalAlignment="Center" Margin="0,0,0,18"/>
+                    <TextBlock Grid.Row="3" x:Name="SidebarVersion" Text="v1.0" Foreground="#242424"
+                               FontSize="10" FontFamily="Consolas" HorizontalAlignment="Center"
+                               Margin="0,0,0,18"/>
                 </Grid>
             </Border>
 
@@ -633,6 +641,46 @@
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
+
+                <!-- История версий -->
+                <Grid x:Name="HistoryPage" Grid.Row="1" Visibility="Collapsed">
+                    <Grid.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Grid.RenderTransform>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock x:Name="HistoryTitle" Text="История версий" Foreground="#ffffff"
+                               FontSize="22" FontWeight="SemiBold" FontFamily="Segoe UI"
+                               Margin="52,10,52,22"/>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled" Padding="0,0,6,0">
+                        <StackPanel x:Name="HistoryList" Margin="52,0,40,30" MaxWidth="620"
+                                    HorizontalAlignment="Left"/>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+
+            <!-- Обязательное обновление: перекрывает интерфейс, пока не установлено -->
+            <Grid x:Name="UpdateOverlay" Grid.ColumnSpan="2" Visibility="Collapsed"
+                  Background="#F5000000" Panel.ZIndex="100">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                            MaxWidth="440" Margin="40,0">
+                    <TextBlock x:Name="UpdateTitle" Text="Требуется обновление" Foreground="#ffffff"
+                               FontSize="22" FontWeight="SemiBold" FontFamily="Segoe UI"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="UpdateMessage" Text="" Foreground="#9a9a9a" FontSize="13"
+                               FontFamily="Segoe UI" TextAlignment="Center" TextWrapping="Wrap"
+                               Margin="0,14,0,0"/>
+                    <ProgressBar x:Name="UpdateProgress" Height="6" Margin="0,24,0,0"
+                                 Minimum="0" Maximum="1" Value="0" Visibility="Collapsed"
+                                 Foreground="#ffffff" Background="#1c1c1c" BorderThickness="0"/>
+                    <Button x:Name="UpdateNowButton" Content="ОБНОВИТЬ" Height="52" Margin="0,26,0,0"
+                            Style="{StaticResource LaunchBtn}" Click="UpdateNowButton_Click"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Border>

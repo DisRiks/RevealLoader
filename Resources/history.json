@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "version": "1.2.0",
+      "type": "normal",
+      "ru": [
+        "Раздел «История версий»: список версий с типом обновления и описанием изменений"
+      ],
+      "en": [
+        "New \"Version history\" section: version list with update type and changelog"
+      ]
+    }
+  ]
+}
