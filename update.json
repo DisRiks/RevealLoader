@@ -1,10 +1,10 @@
 {
   "launcher": {
-    "version": "1.4.0",
-    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.4.0/RevealLoader.exe",
-    "sha256": "78bcbcded621d695f12067623af410ba1d13e23886cdf8b3bbc9b63ac4440be5",
-    "size": 139846686,
-    "notes": "Обновлён клиент и лаунчер"
+    "version": "1.5.0",
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.5.0/RevealLoader.exe",
+    "sha256": "df515c8cd991aa580ed1c29f1446b4edd06bfd0889a478748d5eba20dfa1a1be",
+    "size": 139850782,
+    "notes": "Небольшое визуальное обновление"
   },
   "visual": {
     "version": "1.21.11",
