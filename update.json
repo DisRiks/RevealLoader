@@ -1,10 +1,10 @@
 {
   "launcher": {
-    "version": "1.5.1",
-    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.5.1/RevealLoader.exe",
-    "sha256": "ecacd93f765ae6f5b89cd94406a8d758a4add641168960323f0ba6529dfc50e6",
+    "version": "1.5.2",
+    "url": "https://github.com/DisRiks/RevealLoader/releases/download/v1.5.2/RevealLoader.exe",
+    "sha256": "d5540c104e69b04dc3008d232155988fccc5e1015a97ad2cec378871a71e147a",
     "size": 139850782,
-    "notes": "Исправлено самообновление при переименованном exe"
+    "notes": "Конфиг в папке приложения, новый дефолтный ник"
   },
   "visual": {
     "version": "1.21.11",
